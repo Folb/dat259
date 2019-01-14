@@ -14,10 +14,10 @@ def main():
     ta.setActive(False)
 
     while True:
-        cur = ts.getActive()
-        ts.requestUpdate()
-        if cur != ts.getActive():
-            print('Update on: ' + ts)
+        cur = ta.isActive()
+        ta.requestUpdate()
+        if cur != ta.isActive():
+            print('Update on: ' + ta)
 
         time.sleep(5)
 

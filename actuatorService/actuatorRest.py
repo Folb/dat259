@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
-from sqlaclhemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker
 import requests
 import sys
 import os
@@ -69,3 +69,7 @@ def newSubscription(atype=None, aid=None):
     session.commit()
 
     return 'OK', 200
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=8081)

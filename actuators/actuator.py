@@ -3,7 +3,7 @@ import json
 
 baseUrl = "http://localhost"
 port = ":8081"
-requestEndpoint = "update"
+requestEndpoint = "/update"
 
 class Actuator():
     __type = None
@@ -16,7 +16,7 @@ class Actuator():
     def requestUpdate(self):
        d = self.dictyfy()
        js = json.dumps(d)
-       response = request.post(baseUrl + port + requestEndpoint, data=js)
+       response = requests.post(baseUrl + port + requestEndpoint, data=js)
        #TODO Handle this
 
     def getType(self):
