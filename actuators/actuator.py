@@ -3,7 +3,7 @@ import json
 
 baseUrl = "http://localhost"
 port = ":8081"
-requestEndpoint = "update"
+requestEndpoint = "/update"
 
 class Actuator():
     __type = None
