@@ -13,13 +13,16 @@ class Actuator(Base):
     actuatorType = Column(String(30), nullable=False)
     actuatorActive = Column(Boolean, nullable=False)
 
-class Subscription(Base):
-    __tablename__ = "subscription"
+
+class Rules(Base):
+    __tablename__ = "rules"
     id = Column(Integer, Sequence("subIdSeq"), primary_key=True)
     actuatorId = Column(Integer, ForeignKey("actuator.id"), nullable=False)
     threshold = Column(Float, nullable=False)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    gt = Column(Boolean, nullable=False)
     actuator = relationship(Actuator)
+
 
 engine = create_engine("sqlite:///mysqlite.db")
 Base.metadata.create_all(engine)

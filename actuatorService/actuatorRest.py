@@ -17,7 +17,6 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-@app.route('/actuator', methods=['POST'])
 def actuator():
     data = request.data
     dataDict = json.loads(data)
@@ -30,13 +29,14 @@ def actuator():
     actuator = Actuator(actuatorId=aid, actuatorType=atype, actuatorActive=aActive)
 
     if session.query(Actuator).filter(
-            Actuator.actuatorId==aid,
-            Actuator.actuatorType==atype).count() == 0:
+            Actuator.actuatorId == aid,
+            Actuator.actuatorType == atype).count() == 0:
         session.add(actuator)
         session.commit()
         app.logger.info("New Actuator: " + actuator)
 
     return 'OK', 200
+
 
 @app.route('/actuator/<atype>/<aid>', methods=['POST'])
 def newSubscription(atype=None, aid=None):
@@ -44,20 +44,20 @@ def newSubscription(atype=None, aid=None):
 
 
     actuator = session.query(Actuator).filter(
-            Actuator.actuatorId==aid,
-            Actuator.actuatorType==atype)
+        Actuator.actuatorId == aid,
+        Actuator.actuatorType == atype)
 
     data = request.data
     dataDict = json.loads(data)
     app.logger.info("New subscription:" + dataDict)
     athres = dataDict['threshold']
 
-
     sub = Subscription(actuatorId=actuator.id, threshold=athres)
     session.add(sub)
     session.commit()
 
     return 'OK', 200
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8081, debug=True)
