@@ -51,6 +51,38 @@ def postData():
 
     return 'OK', 200
 
+@app.route('/sensor', methods=['GET', 'POST'])
+def sensors():
+    if request.method == 'POST':
+        data = request.data
+        dataDict = json.loads(data)
+        app.logger.info(dataDict)
+
+        sid = dataDict['id']
+        stype = dataDict['type']
+        
+        sensor = Sensor(sensorId=sid, sensorType=stype)
+
+        if session.query(Sensor).filter(
+                Sensor.sensorId==sid,
+                Sensor.sensorType==stype).count() == 0:
+            session.add(sensor)
+            session.commit()
+            app.logger.info("New sensor added: " + str(sensor))
+        else:
+            return 'Sensor with this ID and type already exist', 200
+
+        return 'OK', 200
+
+    if request.method == 'GET':
+        sensors = session.query(Sensor).all()
+        d = []
+        for s in sensors:
+            d.append(s.dictify())
+        app.logger.info(d)
+        return jsonify(d), 200
+
+        return 'Method not allowed', 405
 
 def publish(dataDict, topicName):
     jsonString = json.dumps(dataDict)

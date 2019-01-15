@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
-from sqlaclhemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker
 import requests
 import sys
 import os
 import json
 import logging
 
-from actuatorDao import Base, Actuator, Subscription
+from actuatorDao import Base, Actuator, Rule
 
 app = Flask(__name__)
 
@@ -41,10 +41,12 @@ def actuator():
     
     if request.method == 'GET':
         actuators = session.query(Actuator).all()
-        js = json.dumps(actuators)
-        return js, 200
+        d = []
+        for a in actuators:
+            d.append(a.dictify())
+        return jsonify(d), 200
 
-    return 'Method not allowed' 405
+    return 'Method not allowed', 405
 
 
 @app.route('/actuator/<atype>/<aid>', methods=['POST'])

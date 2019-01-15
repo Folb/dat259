@@ -12,6 +12,10 @@ class Sensor(Base):
     sensorId = Column(Integer, nullable=False)
     sensorType = Column(String(30), nullable=False)
 
+    def dictify(self):
+        return {"id": self.id, "sensorId": self.sensorId, "sensorType": self.sensorType}
+
+
 class DataPoint(Base):
     __tablename__ = 'datapoint'
     id = Column(Integer, Sequence('dpSeqId'), primary_key=True)
