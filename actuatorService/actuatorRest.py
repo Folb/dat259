@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
-from sqlaclhemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker
 import requests
 import sys
 import os
@@ -42,8 +42,10 @@ def actuator():
     
     if request.method == 'GET':
         actuators = session.query(Actuator).all()
-        js = json.dumps(actuators)
-        return js, 200
+        d = []
+        for a in actuators:
+            d.append(a.dictify())
+        return jsonify(d), 200
 
     return 'Method not allowed', 405
 
@@ -66,8 +68,18 @@ def newSubscription(atype=None, aid=None):
 
         rule = Rule(actuatorId=actuator.id, sensorId=sid, sensorType=stype, threshold=sthres, gt=sgt)
         if session.query(Rule).filter(
-                )
-        session.add(sub)
+                Rule.actuatorId==actuator.id,
+                Rule.sensorType==stype,
+                Rule.sensorId==sid).count() == 0:
+            session.add(rule)
+        else:
+            rule = session.query().filter(
+                Rule.actuatorId==actuator.id,
+                Rule.sensorType==stype,
+                Rule.sensorId==sid)
+            rule.threshold = sthres
+            rule.gt = sgt
+
         session.commit()
 
         return 'OK', 200

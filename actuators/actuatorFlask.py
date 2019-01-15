@@ -26,6 +26,7 @@ def update():
     if prev != actuator.isActive():
         dataDict = {'type': actuator.getType(), 'id': actuator.getId(), 'active': actuator.isActive()}
         publish(dataDict)
+        app.logger.info('Published ' + str(dataDict) + ' to ' + topicName)
 
     app.logger.info(actuator)
 

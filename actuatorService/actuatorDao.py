@@ -13,6 +13,8 @@ class Actuator(Base):
     actuatorType = Column(String(30), nullable=False)
     actuatorActive = Column(Boolean, nullable=False)
 
+    def dictify(self):
+        return {"id":self.id, "actuatorId":self.actuatorId, "actuatorType":self.actuatorType, "actuatorActive":self.actuatorActive}
 
 class Rule(Base):
     __tablename__ = "rules"
