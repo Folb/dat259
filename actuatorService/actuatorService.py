@@ -28,8 +28,8 @@ session = DBSession()
 
 sensorDict = {}
 
-def binaryToDict(the_binary):
-    jsn = ''.join(chr(int(x, 2)) for x in the_binary.split())
+def binaryToDict(binary):
+    jsn = ''.join(chr(int(x, 2)) for x in binary.split())
     d = json.loads(jsn)  
     return d
 

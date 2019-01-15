@@ -17,66 +17,61 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
-@app.route('/update', methods=['POST'])
-def update():
-    data = request.data
-    dataDict = json.loads(data)
-    app.logger.info(dataDict)
-
-    aid = dataDict['id']
-    atype = dataDict['type']
-    aActive = dataDict['active']
-
-    # TODO search through aid and atype to find if it should update
-    actuator = session.query(Actuator).filter(
-        Actuator.actuatorId == aid,
-        Actuator.actuatorType == atype)
-
-    subList = session.query(Subscription).filter(
-        Subscription.actuatorId == actuator.id)
-
-    return 'OK', 200
-
-
 @app.route('/actuator', methods=['GET', 'POST'])
 def actuator():
-    data = request.data
-    dataDict = json.loads(data)
-    app.logger.info(dataDict)
+    if request.method == 'POST':
+        data = request.data
+        dataDict = json.loads(data)
+        app.logger.info(dataDict)
 
-    aid = dataDict['id']
-    atype = dataDict['type']
-    aActive = dataDict['active']
+        aid = dataDict['id']
+        atype = dataDict['type']
+        aActive = dataDict['active']
 
-    actuator = Actuator(actuatorId=aid, actuatorType=atype, actuatorActive=aActive)
+        actuator = Actuator(actuatorId=aid, actuatorType=atype, actuatorActive=aActive)
 
-    if session.query(Actuator).filter(
-            Actuator.actuatorId == aid,
-            Actuator.actuatorType == atype).count() == 0:
-        session.add(actuator)
-        session.commit()
-        app.logger.info("New Actuator: " + actuator)
+        if session.query(Actuator).filter(
+                Actuator.actuatorId == aid,
+                Actuator.actuatorType == atype).count() == 0:
+            session.add(actuator)
+            session.commit()
+            app.logger.info("New Actuator: " + actuator)
 
-    return 'OK', 200
+        return 'OK', 200
+    
+    if request.method == 'GET':
+        actuators = session.query(Actuator).all()
+        js = json.dumps(actuators)
+        return js, 200
+
+    return 'Method not allowed' 405
 
 
 @app.route('/actuator/<atype>/<aid>', methods=['POST'])
 def newSubscription(atype=None, aid=None):
-    actuator = session.query(Actuator).filter(
-        Actuator.actuatorId == aid,
-        Actuator.actuatorType == atype)
+    if request.method == 'POST':
+        actuator = session.query(Actuator).filter(
+            Actuator.actuatorId == aid,
+            Actuator.actuatorType == atype)
+        if actuator == None or actuator == []:
+            return 'Actuator not found', 200
 
-    data = request.data
-    dataDict = json.loads(data)
-    app.logger.info("New subscription:" + dataDict)
-    athres = dataDict['threshold']
+        data = request.data
+        dataDict = json.loads(data) 
+        sid = dataDict['id']
+        stype = dataDict['type']
+        sthres = dataDict['threshold']
+        sgt = dataDict['gt']
 
-    sub = Subscription(actuatorId=actuator.id, threshold=athres)
-    session.add(sub)
-    session.commit()
+        rule = Rule(actuatorId=actuator.id, sensorId=sid, sensorType=stype, threshold=sthres, gt=sgt)
+        if session.query(Rule).filter(
+                )
+        session.add(sub)
+        session.commit()
 
-    return 'OK', 200
+        return 'OK', 200
+
+    return 'Method not allowed', 405
 
 
 if __name__ == "__main__":

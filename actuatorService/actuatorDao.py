@@ -14,10 +14,12 @@ class Actuator(Base):
     actuatorActive = Column(Boolean, nullable=False)
 
 
-class Rules(Base):
+class Rule(Base):
     __tablename__ = "rules"
     id = Column(Integer, Sequence("subIdSeq"), primary_key=True)
     actuatorId = Column(Integer, ForeignKey("actuator.id"), nullable=False)
+    sensorType = Column(String(30), nullable=False)
+    sensorId = Column(Integer, nullable=False)
     threshold = Column(Float, nullable=False)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     gt = Column(Boolean, nullable=False)
