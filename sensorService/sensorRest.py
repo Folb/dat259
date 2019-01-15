@@ -9,11 +9,10 @@ import os
 import logging
 from google.cloud import pubsub_v1
 from sensorDao import Base, Sensor, DataPoint
-from pubSubClient import Publisher
 
 app = Flask(__name__)
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/simon/Downloads/dat259-rest-bd0aaa87ea8c.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "dat259-rest-2c6ee667d075.json"
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./dat259-rest-2c6ee667d075.json"
 publisher = pubsub_v1.PublisherClient()
 engine = create_engine('sqlite:///mysqlite.db')
@@ -38,12 +37,14 @@ def postData():
         sensor = Sensor(sensorType=stype, sensorId=sid)
         dp = DataPoint(sensorId=sid, value=svalue)
 
+
+
         if session.query(Sensor).filter(
                 Sensor.sensorType == stype,
                 Sensor.sensorId == sid).count() == 0:
             session.add(sensor)
             session.commit()
-            createTopic(genTopicName(stype, sid))
+            #createTopic(genTopicName(stype, sid))
 
         session.add(dp)
         session.commit()
@@ -60,8 +61,12 @@ def publish(dataDict, topicName):
 
 
 def callback(messageFuture):
-    Publisher.callback(messageFuture)
-
+    if messageFuture.exception(timeout=50):
+        print('Publishing message on {tn} threw an Exception {exception}').format(
+                tn = topicName, 
+                exception = messageFuture.exception())
+    else:
+        print(messageFuture.result())
 
 def createTopic(topicName):
     publisher.create_topic(topicName)
@@ -71,7 +76,7 @@ def createTopic(topicName):
 def genTopicName(stype, sid):
     topicName = 'projects/{project_id}/topics/{topic_name}'.format(
         project_id="dat259-rest",
-        topic_name=stype + '_' + str(sid))
+        topic_name=stype)
     return topicName
 
 

@@ -34,17 +34,17 @@ class Actuator():
         return
 
     def isActive(self):
-        return self.__status
+        return self.__active
 
     def setActive(self, s):
-        self.__status = s
+        self.__active = s
         return
 
     def dictyfy(self):
         d = {}
         d['type'] = self.__type
         d['id'] = self.__id
-        d['active'] = self.__status
+        d['active'] = self.__active
         return d
 
     def __repr__(self):

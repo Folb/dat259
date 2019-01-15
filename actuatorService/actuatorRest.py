@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlaclhemy.orm import sessionmaker
 import requests
 import sys
 import os
 import json
 import logging
 
-from actuatorDao import Base
+from actuatorDao import Base, Actuator, Subscription
 
 app = Flask(__name__)
 
@@ -28,6 +28,12 @@ def update():
     aActive = dataDict['active']
     
     #TODO search through aid and atype to find if it should update
+    actuator = session.query(Actuator).filter(
+            Actuator.actuatorId==aid, 
+            Actuator.actuatorType==atype)
+
+    subList = session.query(Subscription).filter(
+            Subscription.actuatorId==actuator.id)
 
     return 'OK', 200
 
@@ -70,6 +76,5 @@ def newSubscription(atype=None, aid=None):
 
     return 'OK', 200
 
-
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8081)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8081, debug=True)

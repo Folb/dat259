@@ -1,24 +1,26 @@
 from actuator import Actuator
 import sys
 import time
+from flask import Flask, request, jsonify
+import logging
+import json
 
-class TemperatureActuator(Actuator):
-    
-    def __init__(self):
-        super().setType('temperature')
+app = Flask(__name__)
+actuator = Actuator()
+actuator.setType('temperature')
+actuator.setId(sys.argv[1])
+actuator.setActive(False)
 
-def main():
-    sid = int(sys.argv[1])
-    ta = TemperatureActuator()
-    ta.setId(sid)
-    ta.setActive(False)
+@app.route('/update', methods=['POST'])
+def update():
+    data = request.data
+    js = json.loads(data)
+    app.logger.info(type(js))
+    actuator.setActive(js)
 
-    while True:
-        cur = ta.isActive()
-        ta.requestUpdate()
-        if cur != ta.isActive():
-            print('Update on: ' + ta)
+    app.logger.info(actuator)
 
-        time.sleep(5)
+    return 'OK', 200
 
-if __name__ == '__main__' :main()
+if __name__ == '__main__' :
+    app.run(host='0.0.0.0', port=8082, debug=True)
