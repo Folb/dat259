@@ -17,27 +17,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-@app.route('/update', methods=['POST'])
-def update():
-    data = request.data
-    dataDict = json.loads(data)
-    app.logger.info(dataDict)
-
-    aid = dataDict['id']
-    atype = dataDict['type']
-    aActive = dataDict['active']
-    
-    #TODO search through aid and atype to find if it should update
-    actuator = session.query(Actuator).filter(
-            Actuator.actuatorId==aid, 
-            Actuator.actuatorType==atype)
-
-    subList = session.query(Subscription).filter(
-            Subscription.actuatorId==actuator.id)
-
-    return 'OK', 200
-
-@app.route('/actuator', methods=['GET', 'POST'])
+@app.route('/actuator', methods=['POST'])
 def actuator():
     data = request.data
     dataDict = json.loads(data)
@@ -60,6 +40,9 @@ def actuator():
 
 @app.route('/actuator/<atype>/<aid>', methods=['POST'])
 def newSubscription(atype=None, aid=None):
+    
+
+
     actuator = session.query(Actuator).filter(
             Actuator.actuatorId==aid,
             Actuator.actuatorType==atype)
