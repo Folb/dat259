@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 import logging
 import json
 from google.cloud import pubsub_v1
+import os
 
 app = Flask(__name__)
 actuator = Actuator()
@@ -45,4 +46,5 @@ def callback(messageFuture):
         app.logger.info(messageFuture.result())
 
 if __name__ == '__main__' :
-    app.run(host='0.0.0.0', port=sys.argv[2], debug=True)
+    p = int(sys.argv[2])
+    app.run(host='0.0.0.0', port=p, debug=True)

@@ -6,17 +6,18 @@ import time
 from google.cloud import pubsub_v1
 import os
 
-from actuatorDao import Base, Actuator, Subscription
+from actuatorDao import Base, Actuator, Rule
 
 baseUrl = "http://localhost"
-port = ":8082"
+#TODO add port number to actuator list
+port = ":8083"
 dataEndPoint = "/update"
 
 subName = "projects/dat259-rest/subscriptions/actuatorService"
 topicName = "projects/dat259-rest/topics/temperature"
 
-#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./dat259-rest-2c6ee667d075.json"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/simon/Downloads/dat259-rest-bd0aaa87ea8c.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./dat259-rest-2c6ee667d075.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/simon/Downloads/dat259-rest-bd0aaa87ea8c.json"
 subscriber  = pubsub_v1.SubscriberClient()
 #subscriber.create_subscription(name=subName, topic=topicName)
 
