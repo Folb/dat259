@@ -20,7 +20,8 @@ def create_subscription(project_id, topic_name, subscription_name):
     topic_path = subscriber.topic_path(project_id, topic_name)
     subscription_path = subscriber.subscription_path(project_id, subscription_name)
     subscriber.create_subscription(subscription_path, topic_path)
-    print('Subscription created: {}'.format(subscription))
+    print('Subscription created: {}'.format(subscription_name))
+    return subscriber
 
 
 def callback(msg, subscriber, subscription_name):
