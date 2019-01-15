@@ -17,10 +17,9 @@ def create_topic(topic_name):
     publisher.create_topic(topic_name)
 
 
-def callback(message_future, topic_name):
+def callback(message_future):
     if message_future.exception(timeout=50):
-        print('Publishing message on {} threw an Exception {}.'.format(
-            topic_name, message_future.exception()))
+        print('Publishing message on {topic_name} threw an Exception {message_future.exception()}.')
     else:
         print(message_future.result())
 
@@ -34,5 +33,3 @@ def publish(msg, publisher, topic_name):
 
     # We must keep the main thread from exiting to allow it to process
     # messages in the background.
-    while True:
-        time.sleep(60)

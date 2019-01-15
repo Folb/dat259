@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy import create_engine, Sequence, ForeignKey, Column, Integer, String, Float, DateTime
-from sqlalchemy_utils import create_database
+#from sqlalchemy_utils import create_database
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 

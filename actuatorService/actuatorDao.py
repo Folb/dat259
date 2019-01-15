@@ -1,7 +1,7 @@
-import datatime
+import datetime
 from sqlalchemy import create_engine, Sequence, ForeignKey, Column, Integer, String, Float, DateTime, Boolean
 from sqlalchemy_utils import create_database
-from sqlaclhemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -15,7 +15,7 @@ class Actuator(Base):
 
 class Subscription(Base):
     __tablename__ = "subscription"
-    id = Column(Integer, Sequence("subIdSeq"))
+    id = Column(Integer, Sequence("subIdSeq"), primary_key=True)
     actuatorId = Column(Integer, ForeignKey("actuator.id"), nullable=False)
     threshold = Column(Float, nullable=False)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
