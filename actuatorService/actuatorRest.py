@@ -65,8 +65,18 @@ def newSubscription(atype=None, aid=None):
 
         rule = Rule(actuatorId=actuator.id, sensorId=sid, sensorType=stype, threshold=sthres, gt=sgt)
         if session.query(Rule).filter(
-                )
-        session.add(sub)
+                Rule.actuatorId==actuator.id,
+                Rule.sensorType==stype,
+                Rule.sensorId==sid).count() == 0:
+            session.add(rule)
+        else:
+            rule = session.query().filter(
+                Rule.actuatorId==actuator.id,
+                Rule.sensorType==stype,
+                Rule.sensorId==sid)
+            rule.threshold = sthres
+            rule.gt = sgt
+
         session.commit()
 
         return 'OK', 200
