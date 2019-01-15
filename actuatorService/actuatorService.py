@@ -15,7 +15,8 @@ dataEndPoint = "/update"
 subName = "projects/dat259-rest/subscriptions/actuatorService"
 topicName = "projects/dat259-rest/topics/temperature"
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./dat259-rest-2c6ee667d075.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./dat259-rest-2c6ee667d075.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/simon/Downloads/dat259-rest-bd0aaa87ea8c.json"
 subscriber  = pubsub_v1.SubscriberClient()
 #subscriber.create_subscription(name=subName, topic=topicName)
 
@@ -38,6 +39,7 @@ def callback(msg):
         sensorDict[msgDict['type']] = {}
 
     sensorDict[msgDict['type']][msgDict['id']] = msgDict['value']
+    print(sensorDict)
     msg.ack()
 
     future = subscriber.subscribe(subName, callback)
