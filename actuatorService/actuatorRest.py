@@ -7,7 +7,8 @@ import os
 import json
 import logging
 
-from actuatorDao import Base, Actuator, Subscription
+from actuatorDao import Base, Actuator, Rule
+
 
 app = Flask(__name__)
 
@@ -44,7 +45,7 @@ def actuator():
         js = json.dumps(actuators)
         return js, 200
 
-    return 'Method not allowed' 405
+    return 'Method not allowed', 405
 
 
 @app.route('/actuator/<atype>/<aid>', methods=['POST'])
