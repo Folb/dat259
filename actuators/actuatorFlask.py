@@ -4,6 +4,7 @@ import time
 from flask import Flask, request, jsonify
 import logging
 import json
+from google.cloud import pubsub_v1
 
 app = Flask(__name__)
 actuator = Actuator()
@@ -11,6 +12,9 @@ actuator.setType('temperature')
 actuator.setId(sys.argv[1])
 actuator.setActive(False)
 topicName = "projects/dat259-rest/topics/actuatorUpdates"
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "./dat259-rest-2c6ee667d075.json"
+publisher = pubsub_v1.PublisherClient()
 
 @app.route('/update', methods=['POST'])
 def update():
