@@ -3,7 +3,7 @@ import requests
 
 def post_new_rule(rule: dict, atype, aid):
     requests.post('http://localhost:8081/actuator/' + atype + "/" + aid, data=rule)
-
+    print("New rule added.")
 
 def list_actuators():
     actuators = requests.get("http://localhost:8081/actuator")
@@ -12,10 +12,12 @@ def list_actuators():
 
 def add_actuator(actuator: dict):
     requests.post('http://localhost:8081/actuator/', data=actuator)
+    print("New actuator added.")
 
 
 def update_actuator(bool_val, atype, aid):
     requests.post('http://localhost:8081/actuator/' + atype + "/" + aid + "/status", data=bool_val)
+    print("Actuator updated.")
 
 
 def list_sensors():
@@ -25,3 +27,4 @@ def list_sensors():
 
 def add_sensor(sensor: dict):
     requests.post('http://localhost:8080/sensor', data=sensor)
+    print("New sensor added.")
