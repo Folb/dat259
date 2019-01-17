@@ -69,8 +69,8 @@ while True:
         except ValueError:
             print("Please give a boolean value.")
 
-        rule = {"atype": atype, "aid": aid, "sensor_type": sensor_type,
-                "sensor_id": sensor_id, "threshold": threshold, "gt": gt}
+        rule = {"atype": atype, "aid": aid, "type": sensor_type,
+                "id": sensor_id, "threshold": threshold, "gt": gt}
 
         Requests.post_new_rule(rule, atype, aid)
 
@@ -127,7 +127,7 @@ while True:
 
         sensor_type = input("Sensor_type: ")
 
-        sensor = {"sensor_id": sensor_id, "sensor_type": sensor_type}
+        sensor = {"id": sensor_id, "type": sensor_type}
 
         Requests.add_sensor(sensor)
 
