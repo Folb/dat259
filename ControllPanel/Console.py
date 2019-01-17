@@ -7,7 +7,7 @@ while True:
 
     print()
 
-    print("Here are your options, bitch:")
+    print("All teh st00f dat u can do:")
     print()
 
     print("0: Exit.")
@@ -41,10 +41,33 @@ while True:
 
         atype = input("Actuator type: ")
         aid = input("Actuator id: ")
+
+        try:
+            aid = int(aid)
+        except ValueError:
+            print("Actuator id has to be an integer.")
+
         sensor_type = input("Sensor type: ")
         sensor_id = input("Sensor id: ")
+
+        try:
+            sensor_id = int(sensor_id)
+        except ValueError:
+            print("Sensor id has to be an integer.")
+
         threshold = input("Threshold: ")
+
+        try:
+            threshold = float(threshold)
+        except ValueError:
+            print("Threshold has to be a float.")
+
         gt = input("Greater than or less than threshold? ")
+
+        try:
+            gt = bool(gt)
+        except ValueError:
+            print("Please give a boolean value.")
 
         rule = {"atype": atype, "aid": aid, "sensor_type": sensor_type,
                 "sensor_id": sensor_id, "threshold": threshold, "gt": gt}
@@ -56,8 +79,19 @@ while True:
 
     elif option == 3:
         actuator_id = input("Actuator id: ")
+
+        try:
+            actuator_id = int(actuator_id)
+        except ValueError:
+            print("Actuator id has to be an integer.")
+
         actuator_type = input("Actuator type: ")
         active = input("Active: ")
+
+        try:
+            active = bool(active)
+        except ValueError:
+            print("Please give a boolean value.")
 
         actuator = {"actuator_id": actuator_id, "actuator_type": actuator_type, "active": active}
 
@@ -65,8 +99,20 @@ while True:
 
     elif option == 4:
         boolean_value = input("Please input a boolean value (not sure what for)")
+
+        try:
+            boolean_value = bool(boolean_value)
+        except ValueError:
+            print("Please give a boolean value.")
+
         atype = input("What is the actuator type?")
         aid = input("What is the id of the actuator?")
+
+        try:
+            aid = int(aid)
+        except ValueError:
+            print("Actuator id has to be an integer.")
+
         Requests.update_actuator(boolean_value, atype, aid)
 
     elif option == 5:
@@ -74,6 +120,11 @@ while True:
 
     elif option == 6:
         sensor_id = input("Sensor id: ")
+        try:
+            sensor_id = int(sensor_id)
+        except ValueError:
+            print("Sensor id has to be an integer.")
+
         sensor_type = input("Sensor_type: ")
 
         sensor = {"sensor_id": sensor_id, "sensor_type": sensor_type}
@@ -84,13 +135,12 @@ while True:
 
     exit_or_nah = None
 
-    while exit_or_nah != "n" and exit_or_nah != "y":
+    while exit_or_nah not in ['y', 'n']:
 
         exit_or_nah = input("Would you like to do more? (y/n)")
 
-        if exit_or_nah != "y" and exit_or_nah != "n":
+        if exit_or_nah not in ['y', 'n']:
             print(f"{exit_or_nah} is not a valid option.")
 
     if exit_or_nah == "n":
         exit(0)
-

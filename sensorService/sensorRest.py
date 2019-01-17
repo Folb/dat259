@@ -36,20 +36,19 @@ def postData():
         sensor = Sensor(sensorType=stype, sensorId=sid)
         dp = DataPoint(sensorId=sid, value=svalue)
 
-
-
         if session.query(Sensor).filter(
                 Sensor.sensorType == stype,
                 Sensor.sensorId == sid).count() == 0:
             session.add(sensor)
             session.commit()
-            #createTopic(genTopicName(stype, sid))
+            # createTopic(genTopicName(stype, sid))
 
         session.add(dp)
         session.commit()
         publish(dataDict, genTopicName(stype, sid))
 
     return 'OK', 200
+
 
 @app.route('/sensor', methods=['GET', 'POST'])
 def sensors():
@@ -60,12 +59,12 @@ def sensors():
 
         sid = dataDict['id']
         stype = dataDict['type']
-        
+
         sensor = Sensor(sensorId=sid, sensorType=stype)
 
         if session.query(Sensor).filter(
-                Sensor.sensorId==sid,
-                Sensor.sensorType==stype).count() == 0:
+                Sensor.sensorId == sid,
+                Sensor.sensorType == stype).count() == 0:
             session.add(sensor)
             session.commit()
             app.logger.info("New sensor added: " + str(sensor))
@@ -82,7 +81,8 @@ def sensors():
         app.logger.info(d)
         return jsonify(d), 200
 
-        return 'Method not allowed', 405
+    return 'Method not allowed', 405
+
 
 def publish(dataDict, topicName):
     jsonString = json.dumps(dataDict)
@@ -94,10 +94,11 @@ def publish(dataDict, topicName):
 def callback(messageFuture):
     if messageFuture.exception(timeout=50):
         print('Publishing message on {tn} threw an Exception {exception}').format(
-                tn = topicName, 
-                exception = messageFuture.exception())
+            tn=topicName,
+            exception=messageFuture.exception())
     else:
         print(messageFuture.result())
+
 
 def createTopic(topicName):
     publisher.create_topic(topicName)
