@@ -51,31 +51,34 @@ def callback(msg):
 
 def updateActuators():
     actuators = session.query(Actuator).all()
-    if actuators == []:
+    if not actuators:
         print('No actuators to update')
         return
     
     for actuator in actuators:
         rules = session.query(Rule).filter(Rule.actuatorId==actuator.id)
-        if rules == []:
+        print(actuator.id)
+        if not rules:
             print('No rules for actuator: ' + actuator.dictify())
             continue
     
         for rule in rules:
-            sensor = sensorDict[rule.sensorType][rule.sensorId]
+            sensorValue = sensorDict[rule.sensorType][rule.sensorId]
             newBool = None
             if rule.gt:
-                
+                newBool = sensorValue >= rule.threshold
+            else:
+                newBool = sensorValue < rule.threshold
+
+            js = json.dumps(newBool)
+            request.post(baseUrl + port + dataEndPoint, data=js)
 
 def main():
     subscriber.subscribe(subName, callback=callback)
     while True:
         time.sleep(10)
-        
         updateActuators()
-
-        #js = json.dumps(val)
-        #requests.post(baseUrl + port + dataEndPoint, data=js)
+        print('Actuators updated')
 
 if __name__ == "__main__":
     main()

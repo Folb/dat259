@@ -1,4 +1,4 @@
-from ControllPanel import Requests
+import Requests
 
 print()
 print("Bienvenido!")
@@ -59,8 +59,7 @@ while True:
         actuator_type = input("Actuator type: ")
         active = input("Active: ")
 
-        actuator = {"actuator_id": actuator_id, "actuator_type": actuator_type, "active": active}
-
+        actuator = {"id": actuator_id, "type": actuator_type, "active": active}
         Requests.add_actuator(actuator)
 
     elif option == 4:

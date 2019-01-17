@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 def post_new_rule(rule: dict, atype, aid):
@@ -11,7 +12,8 @@ def list_actuators():
 
 
 def add_actuator(actuator: dict):
-    requests.post('http://localhost:8081/actuator/', data=actuator)
+    js = json.dumps(actuator)
+    requests.post('http://localhost:8081/actuator', data=js)
     print("New actuator added.")
 
 
