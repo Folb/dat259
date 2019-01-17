@@ -3,7 +3,7 @@ import json
 import time
 
 from google.cloud import pubsub_v1
-from sqlalchemy import create_engine, Sequence, ForeignKey, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Sequence, Column, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
