@@ -4,7 +4,7 @@ import json
 
 def post_new_rule(rule: dict, atype, aid):
     rule = json.dumps(rule)
-    requests.post('http://localhost:8081/actuator/' + atype + "/" + aid, data=rule)
+    requests.post('http://localhost:8081/actuator/' + atype + "/" + str(aid), data=rule)
     print("New rule added.")
 
 
@@ -21,7 +21,7 @@ def add_actuator(actuator: dict):
 
 def update_actuator(bool_val, atype, aid):
     bool_val = json.dumps(bool_val)
-    requests.post('http://localhost:8081/actuator/' + atype + "/" + aid + "/status", data=bool_val)
+    requests.post('http://localhost:8081/actuator/' + atype + "/" + str(aid) + "/status", data=bool_val)
     print("Actuator updated.")
 
 

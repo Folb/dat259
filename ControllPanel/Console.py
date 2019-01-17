@@ -1,4 +1,4 @@
-from ControllPanel import Requests
+import Requests
 
 print()
 print("Bienvenido!")

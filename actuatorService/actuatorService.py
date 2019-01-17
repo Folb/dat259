@@ -56,10 +56,9 @@ def updateActuators():
         return
     
     for actuator in actuators:
-        rules = session.query(Rule).filter(Rule.actuatorId==actuator.id)
-        print(actuator.id)
+        rules = session.query(Rule).filter(Rule.actuatorId==actuator.id).all()
         if not rules:
-            print('No rules for actuator: ' + actuator.dictify())
+            print('No rules for actuator: ' + str(actuator.dictify()))
             continue
     
         for rule in rules:

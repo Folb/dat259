@@ -72,12 +72,13 @@ def newSubscription(atype=None, aid=None):
                 Rule.actuatorId==actuator.id,
                 Rule.sensorType==stype,
                 Rule.sensorId==sid).count() == 0:
+            app.logger.info('Add new rule')
             session.add(rule)
         else:
             rule = session.query().filter(
                 Rule.actuatorId==actuator.id,
                 Rule.sensorType==stype,
-                Rule.sensorId==sid)
+                Rule.sensorId==sid).all()
             rule.threshold = sthres
             rule.gt = sgt
 
