@@ -19,7 +19,16 @@ while True:
     print("6: Add a new sensor.")
     print()
 
-    option = int(input("What would you like to do? "))
+    option = input("What would you like to do? ")
+
+    print()
+
+    try:
+        option = int(option)
+    except ValueError:
+        print("Input has to be an integer.")
+
+    print()
 
     if option not in range(0, 7):
         print(f"{option} is not a valid option.")
@@ -72,7 +81,6 @@ while True:
         sensor = {"sensor_id": sensor_id, "sensor_type": sensor_type}
 
         Requests.add_sensor(sensor)
-
 
     print()
 
