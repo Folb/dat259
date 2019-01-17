@@ -21,13 +21,14 @@ session = DBSession()
 @app.route('/actuator', methods=['GET', 'POST'])
 def actuator():
     if request.method == 'POST':
+        print(request.data)
         data = request.data
         dataDict = json.loads(data)
         app.logger.info(dataDict)
 
-        aid = dataDict['id']
+        aid = int(dataDict['id'])
         atype = dataDict['type']
-        aActive = dataDict['active']
+        aActive = bool(dataDict['active'])
 
         actuator = Actuator(actuatorId=aid, actuatorType=atype, actuatorActive=aActive)
 
@@ -36,7 +37,7 @@ def actuator():
                 Actuator.actuatorType == atype).count() == 0:
             session.add(actuator)
             session.commit()
-            app.logger.info("New Actuator: " + actuator)
+            app.logger.info("New Actuator: " + str(actuator))
 
         return 'OK', 200
     

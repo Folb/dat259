@@ -93,7 +93,7 @@ while True:
         except ValueError:
             print("Please give a boolean value.")
 
-        actuator = {"actuator_id": actuator_id, "actuator_type": actuator_type, "active": active}
+        actuator = {"id": actuator_id, "type": actuator_type, "active": active}
 
         Requests.add_actuator(actuator)
 
