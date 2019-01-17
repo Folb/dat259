@@ -56,7 +56,7 @@ def newSubscription(atype=None, aid=None):
     if request.method == 'POST':
         actuator = session.query(Actuator).filter(
             Actuator.actuatorId == aid,
-            Actuator.actuatorType == atype)
+            Actuator.actuatorType == atype).first()
         if actuator == None or actuator == []:
             return 'Actuator not found', 200
 
@@ -66,7 +66,7 @@ def newSubscription(atype=None, aid=None):
         stype = dataDict['type']
         sthres = dataDict['threshold']
         sgt = dataDict['gt']
-
+    
         rule = Rule(actuatorId=actuator.id, sensorId=sid, sensorType=stype, threshold=sthres, gt=sgt)
         if session.query(Rule).filter(
                 Rule.actuatorId==actuator.id,

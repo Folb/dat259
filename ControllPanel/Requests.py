@@ -15,7 +15,7 @@ def list_actuators():
 
 def add_actuator(actuator: dict):
     actuator = json.dumps(actuator)
-    requests.post('http://localhost:8081/actuator/', data=actuator)
+    requests.post('http://localhost:8081/actuator', data=actuator)
     print("New actuator added.")
 
 

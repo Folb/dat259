@@ -70,7 +70,7 @@ def updateActuators():
                 newBool = sensorValue < rule.threshold
 
             js = json.dumps(newBool)
-            request.post(baseUrl + port + dataEndPoint, data=js)
+            requests.post(baseUrl + port + dataEndPoint, data=js)
 
 def main():
     subscriber.subscribe(subName, callback=callback)
