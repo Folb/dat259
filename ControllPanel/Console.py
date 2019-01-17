@@ -73,8 +73,6 @@ while True:
         Requests.list_sensors()
 
     elif option == 6:
-        # sensorId = Column(Integer, nullable=False)
-        # sensorType = Column(String(30), nullable=False)
         sensor_id = input("Sensor id: ")
         sensor_type = input("Sensor_type: ")
 
