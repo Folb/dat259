@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import json
+from json import JSONDecodeError
+
 from json import JSONEncoder
 import requests
 import sys
@@ -9,11 +11,19 @@ import os
 import logging
 from google.cloud import pubsub_v1
 from sensorDao import Base, Sensor, DataPoint
+import boto3
 
 app = Flask(__name__)
 
+# --------------- Google App Engine ---------------
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./dat259-rest-2c6ee667d075.json"
 publisher = pubsub_v1.PublisherClient()
+
+# --------------- Amazon Web Services ---------------
+# Service resource
+sqs = boto3.resource('sqs')
+queue = sqs.get_queue_by_name(QueueName='testQ')
+
 engine = create_engine('sqlite:///mysqlite.db')
 Base.metadata.bind = engine
 
@@ -87,8 +97,13 @@ def sensors():
 def publish(dataDict, topicName):
     jsonString = json.dumps(dataDict)
     msg = ' '.join(format(ord(letter), 'b') for letter in jsonString)
+
+    # ---------- for publishing to gae ----------
     messageFuture = publisher.publish(topicName, msg.encode(), spam="eggs")
     messageFuture.add_done_callback(callback)
+
+    # ---------- for publishing to aws ----------
+    queue.send_message(MessageBody=msg)
 
 
 def callback(messageFuture):
