@@ -56,10 +56,9 @@ def updateActuators():
         return
     
     for actuator in actuators:
-        rules = session.query(Rule).filter(Rule.actuatorId==actuator.id)
-        print(actuator.id)
+        rules = session.query(Rule).filter(Rule.actuatorId==actuator.id).all()
         if not rules:
-            print('No rules for actuator: ' + actuator.dictify())
+            print('No rules for actuator: ' + str(actuator.dictify()))
             continue
     
         for rule in rules:
@@ -71,7 +70,7 @@ def updateActuators():
                 newBool = sensorValue < rule.threshold
 
             js = json.dumps(newBool)
-            request.post(baseUrl + port + dataEndPoint, data=js)
+            requests.post(baseUrl + port + dataEndPoint, data=js)
 
 def main():
     subscriber.subscribe(subName, callback=callback)
